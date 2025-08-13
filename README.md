@@ -97,3 +97,115 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 
 Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
 # tba-access-control
+
+# TBA Access Control (RBAC)
+
+Hệ thống quản lý người dùng & phân quyền (RBAC) sử dụng NestJS + TypeORM + MySQL.
+
+## 🛠️ Yêu cầu
+- Node.js >= 18
+- MySQL >= 5.7
+
+## 🚀 Cài đặt
+```bash
+# Cài dependencies
+npm install
+
+# Copy file cấu hình mẫu
+cp .env.example .env
+# Hoặc tự tạo file .env với nội dung:
+# DB_HOST=localhost
+# DB_PORT=3306
+# DB_USERNAME=root
+# DB_PASSWORD=your_password
+# DB_DATABASE=tba_access_control
+# JWT_ACCESS_SECRET=your_access_secret
+# JWT_REFRESH_SECRET=your_refresh_secret
+# ...
+```
+
+## ⚡ Khởi tạo database
+- Tạo database thủ công trên MySQL:
+  ```sql
+  CREATE DATABASE tba_access_control CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+  ```
+- **Hoặc** dùng script tự động (nên dùng):
+  ```bash
+  npm run prestart # (nếu đã cấu hình script tự động tạo DB)
+  ```
+
+## 🗄️ Migration
+- Tạo bảng tự động bằng migration:
+  ```bash
+  npm run migration:run
+  ```
+- Tạo migration mới từ entity:
+  ```bash
+  npm run migration:generate
+  ```
+
+## 🌱 Seed dữ liệu mẫu
+```bash
+npx ts-node src/database/seed.ts
+# Hoặc nếu có script:
+npm run seed
+```
+- Tài khoản mặc định:
+  - Username: `superadmin`
+  - Password: `superadmin`
+
+## 🏃 Chạy ứng dụng
+```bash
+npm run start:dev
+```
+- Truy cập: http://localhost:3000
+
+## 📚 API Endpoints
+- Auth:
+  - POST `/auth/register`
+  - POST `/auth/login`
+  - POST `/auth/refresh`
+- Users:
+  - GET `/users`
+  - GET `/users/:id`
+  - POST `/users`
+  - PATCH `/users/:id`
+  - DELETE `/users/:id`
+- Roles:
+  - GET `/roles`
+  - POST `/roles`
+  - PATCH `/roles/:id`
+  - DELETE `/roles/:id`
+- Permissions:
+  - GET `/permissions`
+  - POST `/permissions`
+  - PATCH `/permissions/:id`
+  - DELETE `/permissions/:id`
+
+## 🔒 Bảo mật
+- Helmet, CORS, Rate limiting
+- Middleware log request
+- Validation: class-validator + class-transformer
+
+## 📝 Ghi chú
+- Để đổi secret JWT, sửa trong file `.env`.
+- Để thêm quyền, role, hãy seed lại hoặc dùng API.
+- Để tự động tạo database, có thể dùng script NodeJS trước khi start app.
+
+## 📂 Cấu trúc thư mục
+```
+├── src/
+│   ├── auth/
+│   ├── users/
+│   ├── roles/
+│   ├── permissions/
+│   ├── common/
+│   └── database/
+├── .env.example
+├── package.json
+└── README.md
+```
+
+---
+
+> Mọi thắc mắc vui lòng liên hệ quản trị dự án.
