@@ -10,51 +10,41 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
 @Controller('users')
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, RoleGuard, PermissionGuard)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
   @Roles('Admin', 'SuperAdmin')
-  @UseGuards(RoleGuard)
   @Permissions('user.read')
-  @UseGuards(PermissionGuard)
   findAll() {
     return this.usersService.findAll();
   }
 
   @Get(':id')
   @Roles('Admin', 'SuperAdmin')
-  @UseGuards(RoleGuard)
   @Permissions('user.read')
-  @UseGuards(PermissionGuard)
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.usersService.findOne(id);
   }
 
   @Post()
   @Roles('Admin', 'SuperAdmin')
-  @UseGuards(RoleGuard)
   @Permissions('user.create')
-  @UseGuards(PermissionGuard)
   create(@Body() body: CreateUserDto) {
     return this.usersService.create(body);
   }
 
   @Patch(':id')
   @Roles('Admin', 'SuperAdmin')
-  @UseGuards(RoleGuard)
   @Permissions('user.update')
-  @UseGuards(PermissionGuard)
   update(@Param('id', ParseIntPipe) id: number, @Body() body: UpdateUserDto) {
     return this.usersService.update(id, body);
   }
 
   @Delete(':id')
   @Roles('Admin', 'SuperAdmin')
-  @UseGuards(RoleGuard)
   @Permissions('user.delete')
-  @UseGuards(PermissionGuard)
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.usersService.remove(id);
   }

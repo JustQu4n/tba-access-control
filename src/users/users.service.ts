@@ -14,11 +14,11 @@ export class UsersService {
   ) {}
 
   async findAll() {
-    return this.userRepo.find({ relations: ['role'] });
+  return this.userRepo.find({ relations: ['role', 'role.permissions'] });
   }
 
   async findOne(id: number) {
-    const user = await this.userRepo.findOne({ where: { id }, relations: ['role'] });
+  const user = await this.userRepo.findOne({ where: { id }, relations: ['role', 'role.permissions'] });
     if (!user) throw new NotFoundException('User not found');
     return user;
   }

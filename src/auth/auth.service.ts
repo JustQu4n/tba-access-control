@@ -18,7 +18,7 @@ export class AuthService {
   ) {}
 
   async validateUser(username: string, password: string): Promise<User> {
-    const user = await this.userRepo.findOne({ where: { username }, relations: ['role'] });
+  const user = await this.userRepo.findOne({ where: { username }, relations: ['role', 'role.permissions'] });
     if (!user || !(await bcrypt.compare(password, user.password))) {
       throw new UnauthorizedException('Invalid credentials');
     }
@@ -53,7 +53,7 @@ export class AuthService {
   async refresh(token: string) {
     try {
       const payload = this.jwtService.verify(token, { secret: process.env.JWT_REFRESH_SECRET });
-      const user = await this.userRepo.findOne({ where: { id: payload.sub }, relations: ['role'] });
+  const user = await this.userRepo.findOne({ where: { id: payload.sub }, relations: ['role', 'role.permissions'] });
       if (!user) throw new UnauthorizedException();
       return this.login(user);
     } catch {
