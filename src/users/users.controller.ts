@@ -6,6 +6,8 @@ import { Roles } from '../common/decorators/roles.decorator';
 import { Permissions } from '../common/decorators/permissions.decorator';
 import { RoleGuard } from '../common/guards/role.guard';
 import { PermissionGuard } from '../common/guards/permission.guard';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Controller('users')
 @UseGuards(JwtAuthGuard)
@@ -35,7 +37,7 @@ export class UsersController {
   @UseGuards(RoleGuard)
   @Permissions('user.create')
   @UseGuards(PermissionGuard)
-  create(@Body() body: { username: string; email: string; password: string; role?: string }) {
+  create(@Body() body: CreateUserDto) {
     return this.usersService.create(body);
   }
 
@@ -44,7 +46,7 @@ export class UsersController {
   @UseGuards(RoleGuard)
   @Permissions('user.update')
   @UseGuards(PermissionGuard)
-  update(@Param('id', ParseIntPipe) id: number, @Body() body: Partial<{ username: string; email: string; password: string; role?: string }>) {
+  update(@Param('id', ParseIntPipe) id: number, @Body() body: UpdateUserDto) {
     return this.usersService.update(id, body);
   }
 

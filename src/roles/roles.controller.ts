@@ -1,6 +1,8 @@
 // src/roles/roles.controller.ts
 import { Controller, Get, Post, Patch, Delete, Param, Body, ParseIntPipe } from '@nestjs/common';
 import { RolesService } from './roles.service';
+import { CreateRoleDto } from './dto/create-role.dto';
+import { UpdateRoleDto } from './dto/update-role.dto';
 
 @Controller('roles')
 export class RolesController {
@@ -12,12 +14,12 @@ export class RolesController {
   }
 
   @Post()
-  create(@Body() body: { name: string; description?: string; permissions?: number[] }) {
+  create(@Body() body: CreateRoleDto) {
     return this.rolesService.create(body);
   }
 
   @Patch(':id')
-  update(@Param('id', ParseIntPipe) id: number, @Body() body: Partial<{ name: string; description: string; permissions: number[] }>) {
+  update(@Param('id', ParseIntPipe) id: number, @Body() body: UpdateRoleDto) {
     return this.rolesService.update(id, body);
   }
 
