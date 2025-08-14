@@ -12,13 +12,19 @@ export class PermissionGuard implements CanActivate {
       context.getHandler(),
       context.getClass(),
     ]);
-    if (!requiredPermissions) return true;
-    const { user } = context.switchToHttp().getRequest();
-    if (!user || !user.role || !user.role.permissions) {
-      throw new ForbiddenException('Insufficient permissions');
+    if (!requiredPermissions || requiredPermissions.length === 0) {
+      return true;
     }
-    const userPerms = user.role.permissions.map((p: any) => p.name);
-    if (!requiredPermissions.every((perm) => userPerms.includes(perm))) {
+
+    const { user } = context.switchToHttp().getRequest();
+    if (!user || !user.permissions) {
+      throw new ForbiddenException('No permissions found');
+    }
+
+    const hasPermission = requiredPermissions.every((perm) =>
+      user.permissions.includes(perm),
+    );
+    if (!hasPermission) {
       throw new ForbiddenException('Insufficient permissions');
     }
     return true;

@@ -42,4 +42,15 @@ export class RolesService {
     if (!role) throw new NotFoundException('Role not found');
     return this.roleRepo.remove(role);
   }
+
+  async assignPermissions(roleId: number, permissionIds: number[]) {
+    const role = await this.roleRepo.findOne({ where: { id: roleId }, relations: ['permissions'] });
+    if (!role) throw new NotFoundException('Role not found');
+
+    const permissions = await this.permRepo.findByIds(permissionIds);
+    if (!permissions || permissions.length === 0) throw new NotFoundException('Permissions not found');
+
+    role.permissions = permissions;
+    return this.roleRepo.save(role);
+  }
 }
